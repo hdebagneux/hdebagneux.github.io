@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Line-following robot — Hanaé Frotier de Bagneux</title>
+<meta name="description" content="An autonomous line-following robot combining a PID controller with breadth-first path planning. Two-week robotics bootcamp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="home" href="../index.html">← Hanaé Frotier de Bagneux</a>
+  <nav>
+    <a href="../index.html#projects">Projects</a>
+    <a href="../cv.html">CV</a>
+    <a href="../index.html#contact">Contact</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="band band--tight project-head">
+    <p class="eyebrow">Robotics bootcamp · November 2025</p>
+    <h1>Two weeks to make a robot stay on a line and know where it is going.</h1>
+    <p class="lede">Two problems that sound like one. Staying on the track is continuous control; deciding which way to turn at a junction is discrete search. The robot has to do both at once, on the same hardware, in real time.</p>
+
+    <dl class="factsheet">
+      <div><dt>Context</dt><dd>Robotics bootcamp<br>CentraleSupélec</dd></div>
+      <div><dt>Duration</dt><dd>Two weeks</dd></div>
+      <div><dt>Team</dt><dd>[to fill in]</dd></div>
+      <div><dt>Stack</dt><dd>Python</dd></div>
+    </dl>
+
+    <ul class="actions">
+      <li><a class="btn btn--primary" href="https://github.com/hdebagneux/line-following-robot">Source code</a></li>
+    </ul>
+  </section>
+
+  <section class="prose">
+
+    <h2>Staying on the line</h2>
+
+    <p>The robot reads its offset from the line and has to correct it without oscillating. A proportional term alone overshoots and hunts around the track; adding derivative damping settles it; the integral term cleans up the steady offset that appears on long curves.</p>
+
+    <div class="eq">
+      <div>$$u(t) = K_p\,e(t) + K_i\int_0^t e(\tau)\,d\tau + K_d\,\frac{de(t)}{dt}$$</div>
+      <p class="eq-note">Three gains, and no formula that gives them. Tuning is where most of the time went — and where the difference between a robot that finishes the course and one that leaves it is decided.</p>
+    </div>
+
+    <p>[Describe here what you actually tuned and what went wrong: the speed at which it started oscillating, how you handled sharp corners, whether the sampling rate became a limit.]</p>
+
+    <h2>Knowing where to go</h2>
+
+    <p>The track is a graph: junctions are nodes, segments are edges. Finding the shortest route to a target is then breadth-first search, which explores level by level and therefore returns the path with the fewest segments first.</p>
+
+    <p>[Describe here how the map was represented, how junctions were detected from the sensors, and what happened when detection failed.]</p>
+
+    <h2>What I would do differently</h2>
+
+    <p>[A short, honest paragraph here is worth more than a longer description of what worked. What was the real bottleneck — the control loop, the sensing, the timing?]</p>
+
+  </section>
+
+  <p class="next"><a href="cable-fault.html">Next project → Cable fault detection</a></p>
+
+</main>
+
+<footer class="wrap">
+  Built and hosted on GitHub Pages.
+</footer>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EV battery range model — Hanaé Frotier de Bagneux</title>
+<meta name="description" content="From a pulse test on a single lithium-ion cell to the driving range of an electric vehicle over the WLTP cycle. Modelling week with EDF R&D.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="home" href="../index.html">← Hanaé Frotier de Bagneux</a>
+  <nav>
+    <a href="../index.html#projects">Projects</a>
+    <a href="../cv.html">CV</a>
+    <a href="../index.html#contact">Contact</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="band band--tight project-head">
+    <p class="eyebrow">Data and Modelling Weeks · EDF R&amp;D</p>
+    <h1>How far can a car go, starting from one cell on a lab bench?</h1>
+    <p class="lede">A pulse test on a single lithium-ion cell gives you a voltage drop and a capacity. Turning that into a number of kilometres takes three models stacked on top of each other — and the interesting part is where the error ends up.</p>
+
+    <dl class="factsheet">
+      <div><dt>Context</dt><dd>Data and Modelling Weeks<br>CentraleSupélec</dd></div>
+      <div><dt>Partner</dt><dd>EDF R&amp;D</dd></div>
+      <div><dt>Reference vehicle</dt><dd>Tesla Model S<br>WLTP Class 3 cycle</dd></div>
+      <div><dt>Stack</dt><dd>Python, NumPy,<br>SciPy, Matplotlib</dd></div>
+    </dl>
+
+    <ul class="actions">
+      <li><a class="btn btn--primary" href="https://github.com/hdebagneux/cell-to-vehicle-range-model">Source code</a></li>
+      <li><a class="btn" href="#">Technical report (PDF)</a></li>
+    </ul>
+  </section>
+
+  <section class="prose">
+
+    <h2>The chain</h2>
+
+    <p>A longitudinal vehicle model turns a standardized speed profile into an electrical power demand. An equivalent circuit model, identified from laboratory pulse tests, turns that demand into a cell current. Coulomb counting turns the current into a state of charge, and the number of cycles needed to empty the pack gives the range.</p>
+
+    <p>Because the cell parameters can be re-identified at different states of health, the same pipeline also answers a second question: how much range does the battery lose as it ages?</p>
+
+    <div class="result">
+      <span class="num">681 km</span>
+      <p>Predicted for a fresh pack, against 744 km announced by the manufacturer — an 8.5 % underestimate from a deliberately simple model.</p>
+    </div>
+
+    <h2>What the vehicle asks of the battery</h2>
+
+    <p>Three forces resist the car: inertia, rolling resistance, and aerodynamic drag. Their sum times the speed is the mechanical power at the wheels.</p>
+
+    <div class="eq">
+      <div>$$F(t) = m\frac{dv}{dt} + m g C_{rr} + \tfrac{1}{2}\rho C_d A_f v^2 \qquad P_{\text{mech}} = F(t)\,v(t)$$</div>
+    </div>
+
+    <p>The model was built in three passes rather than all at once: bare mechanics first, then drivetrain losses, then regenerative braking and auxiliary loads. The final form is piecewise, because pushing the car and recovering energy from it do not share an efficiency.</p>
+
+    <div class="eq">
+      <div>$$P_{\text{bat}}(t) = \begin{cases} \dfrac{P_{\text{mech}}}{\eta_{\text{trac}}} + P_{\text{aux}}, & P_{\text{mech}} \geq 0 \\[2ex] P_{\text{mech}}\,\eta_{\text{regen}} + P_{\text{aux}}, & P_{\text{mech}} < 0 \end{cases}$$</div>
+      <p class="eq-note">Braking is assumed to be handled entirely by the electric machine. That holds here because the WLTP cycle only contains smooth decelerations, where friction brakes barely intervene on a modern EV.</p>
+    </div>
+
+    <figure>
+      <img src="../assets/battery_power_wltp.png" alt="Electrical power demanded at the battery terminals over the WLTP cycle">
+      <figcaption>Power demand across the cycle. The peaks — about 62 kW drawing, 23 kW recovering — are what set the sizing constraints for the pack.</figcaption>
+    </figure>
+
+    <h2>What the cell can give</h2>
+
+    <p>Each cell is a voltage source in series with a single resistance, both depending on the state of charge. Simple to the point of being crude, and chosen for that: few parameters, all of them identifiable from a pulse test.</p>
+
+    <p>After a current step, the terminal voltage drops instantly before slower transients appear. Diffusion cannot react that fast, so that first drop belongs entirely to the ohmic resistance:</p>
+
+    <div class="eq">
+      <div>$$R_0 = \frac{\Delta V_{\text{ohmic}}}{\Delta I}$$</div>
+    </div>
+
+    <div class="pair">
+      <figure>
+        <img src="../assets/r0_vs_soc.png" alt="Internal resistance as a function of state of charge, for charge and discharge">
+        <figcaption>Resistance climbs sharply at low charge, then flattens. The gap between charging and discharging shows losses are not symmetric.</figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/ocv_vs_soc.png" alt="Open-circuit voltage as a function of state of charge">
+        <figcaption>Open-circuit voltage, measured during rest phases. The curves for different states of health sit almost on top of each other.</figcaption>
+      </figure>
+    </div>
+
+    <p>That second observation matters more than it looks. Ageing changes capacity and resistance, but not the equilibrium voltage — which tells you which two quantities to track over a battery's life, and which one you can leave alone.</p>
+
+    <h2>Joining the two</h2>
+
+    <p>The vehicle model gives a power, the circuit model gives a voltage. The link between them is quadratic in the current, solved at every time step:</p>
+
+    <div class="eq">
+      <div>$$R_0 I^2 + OCV\,I - P_{\text{cell}} = 0 \qquad\Longrightarrow\qquad I = \frac{-OCV + \sqrt{OCV^2 + 4R_0P_{\text{cell}}}}{2R_0}$$</div>
+      <p class="eq-note">The positive root, necessarily. The negative one would return a discharge current whatever the sign of the requested power, which is meaningless.</p>
+    </div>
+
+    <h2>Sizing the pack</h2>
+
+    <p>Two independent constraints, each fixing one dimension. Voltage sets how many cells go in series: a 400 V architecture with cells swinging between 3.1 and 4.2 V gives 110. Energy sets how many strings go in parallel: 95 kWh of usable energy at roughly 222 Wh per cell needs about 428 cells, so 4 strings.</p>
+
+    <p>The result is checked under peak load. At the lowest pack voltage and worst-case resistance, the drop is around 7.5 V on a 400 V pack — negligible — and 45 A per cell, comfortably inside the range the characterization tests covered. The configuration holds.</p>
+
+    <table class="data">
+      <tr><th>Series</th><td>110 cells</td></tr>
+      <tr><th>Parallel</th><td>4 strings</td></tr>
+      <tr><th>Total</th><td>440 cells, ≈ 97.7 kWh</td></tr>
+    </table>
+
+    <h2>Ageing</h2>
+
+    <table class="data">
+      <tr><th>State of health</th><th>100 %</th><th>98.5 %</th><th>97.0 %</th><th>94.4 %</th><th>92.8 %</th></tr>
+      <tr><th>Range</th><td>681 km</td><td>669</td><td>660</td><td>643</td><td>630</td></tr>
+    </table>
+
+    <figure>
+      <img src="../assets/soc_vs_distance_soh.png" alt="State of charge against distance travelled, for several states of health">
+      <figcaption>Over a single cycle the curves barely separate. Over a full discharge, 7 % of state of health costs 51 km.</figcaption>
+    </figure>
+
+    <h2>Where the error actually is</h2>
+
+    <p>A one-at-a-time sensitivity analysis on every parameter gave a clear answer, and not the one I expected. The dominant term is not the battery model at all — it is auxiliary power, the constant draw of heating, lighting and electronics, which is independent of speed and therefore accumulates with time rather than distance. Traction efficiency comes second, since the battery power scales roughly as its inverse.</p>
+
+    <p>Two corrections illustrate the point. Modelled pack mass, at 1 kg per cell, is lighter than teardown estimates of the real vehicle; correcting for it brings the prediction to 702 km and the error to 5.6 %. Dropping auxiliary power to 500 W, plausible in mild weather, closes part of what remains.</p>
+
+    <p>The conclusion is worth stating plainly: the residual error sits in the vehicle-level assumptions, not in the cell model. Refining the battery further would have bought very little.</p>
+
+    <h2>What it does not do</h2>
+
+    <p>No polarization dynamics — a zeroth-order circuit cannot reproduce voltage relaxation, and it shows when the model is compared against a measured recovery curve. No temperature dependence, no cell-to-cell imbalance, no road slope, and constant efficiencies throughout. All deliberate: the framework is built for pack sizing and comparative range analysis, where transparency and a low parameter count are worth more than absolute accuracy.</p>
+
+  </section>
+
+  <p class="next"><a href="line-robot.html">Next project → Line-following robot</a></p>
+
+</main>
+
+<footer class="wrap">
+  Built and hosted on GitHub Pages.
+</footer>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+</body>
+</html>

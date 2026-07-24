@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cable fault detection — Hanaé Frotier de Bagneux</title>
+<meta name="description" content="A reflectometry simulator that locates faults in electrical cables in both the time and frequency domains. Research project with EDF R&D.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="home" href="../index.html">← Hanaé Frotier de Bagneux</a>
+  <nav>
+    <a href="../index.html#projects">Projects</a>
+    <a href="../cv.html">CV</a>
+    <a href="../index.html#contact">Contact</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="band band--tight project-head">
+    <p class="eyebrow">Research project · EDF R&amp;D</p>
+    <h1>Finding a fault in a buried cable by listening to its echo.</h1>
+    <p class="lede">A cable can run for kilometres underground. When something goes wrong in it — corrosion, a crushed section, an animal through the insulation — the fault is invisible. Reflectometry finds it by injecting a pulse and reading what comes back.</p>
+
+    <dl class="factsheet">
+      <div><dt>Context</dt><dd>Bachelor of Global Engineering<br>CentraleSupélec × McGill</dd></div>
+      <div><dt>Partner</dt><dd>EDF R&amp;D<br>Supervisor: Susana Naranjo Villamil</dd></div>
+      <div><dt>Team</dt><dd>Benjamin Dieu, Lina Skik,<br>Hana Toumi and myself</dd></div>
+      <div><dt>Stack</dt><dd>Python, NumPy, SciPy,<br>Matplotlib, Streamlit</dd></div>
+    </dl>
+
+    <ul class="actions">
+      <li><a class="btn btn--primary" href="https://cablefault-ehi3c5lqxdnre9q4bmhjii.streamlit.app/">Open the live tool</a></li>
+      <li><a class="btn" href="https://github.com/hdebagneux/cable-fault-localization">Source code</a></li>
+      <li><a class="btn" href="#">Technical report (PDF)</a></li>
+    </ul>
+  </section>
+
+  <section class="prose">
+
+    <figure>
+      <img src="../assets/streamlit_homepage.png" alt="Homepage of the simulation tool, offering a frequency-domain and a time-domain module">
+      <figcaption>The tool opens on the two analysis modes. They answer the same question through genuinely different physics, so they are kept separate rather than merged into one screen.</figcaption>
+    </figure>
+
+    <h2>The problem</h2>
+
+    <p>Instruments that do reflectometry exist, but they are expensive and their waveforms need a trained eye. There was no accessible way to simulate a fault, watch how the signal behaves, and compare detection methods before committing to hardware. EDF also needs large labelled datasets to train fault-diagnosis algorithms, and a simulator is a natural way to produce them.</p>
+
+    <p>So the question we set ourselves was less about accuracy alone and more about both at once: can a tool built on transmission line theory localize faults reliably <em>and</em> stay usable by someone with no signal processing background?</p>
+
+    <div class="result">
+      <span class="num">~1 %</span>
+      <p>Localization error relative to cable length, consistent across fault types and positions, in both the time and frequency domains.</p>
+    </div>
+
+    <h2>Starting from the physics</h2>
+
+    <p>Once a cable is long compared to the signal wavelength, it stops behaving like a component and starts behaving like a medium: different points along it sit at different phases at the same instant. The line is cut into infinitesimal segments, each carrying four per-unit-length parameters — resistance, inductance, capacitance, conductance. Applying Kirchhoff's laws to one segment and shrinking it gives the telegrapher's equations.</p>
+
+    <div class="eq">
+      <div>$$\frac{\partial v(z,t)}{\partial z} = -R\,i(z,t) - L\frac{\partial i(z,t)}{\partial t} \qquad \frac{\partial i(z,t)}{\partial z} = -G\,v(z,t) - C\frac{\partial v(z,t)}{\partial t}$$</div>
+      <p class="eq-note">Everything downstream comes from these two. A fault is nothing more than a local deviation of R, L, C or G — which shifts the characteristic impedance, and therefore sends part of the wave back.</p>
+    </div>
+
+    <p>At any discontinuity, the fraction reflected is set by the impedance mismatch alone:</p>
+
+    <div class="eq">
+      <div>$$\Gamma = \frac{Z_L - Z_c}{Z_L + Z_c}$$</div>
+      <p class="eq-note">Zero for a matched load, +1 for an open circuit, −1 for a short. This single number is what the whole diagnostic rests on.</p>
+    </div>
+
+    <h2>Time domain: watching the pulse travel</h2>
+
+    <h3>The grid has rules</h3>
+
+    <p>A finite-difference scheme only behaves if the steps are chosen properly. Two constraints govern the time step, and the tool enforces both rather than trusting the user: the signal must not cross more than one cell per step, and the sampling must resolve the highest frequency in the pulse.</p>
+
+    <div class="eq">
+      <div>$$\Delta t \leq 0.9\,\frac{\Delta z}{v_{\max}} \qquad\qquad \Delta t \leq \frac{1}{2 f_{\max}}$$</div>
+      <p class="eq-note">The tighter of the two is taken. Ignore them and the solution does not degrade gracefully — it diverges.</p>
+    </div>
+
+    <figure>
+      <img src="../assets/stability_violation.png" alt="Simulated voltage along the line showing violent unphysical oscillations">
+      <figcaption>What a violated stability condition looks like. Not a noisy result — a meaningless one.</figcaption>
+    </figure>
+
+    <h3>Why a second-order scheme was needed</h3>
+
+    <p>The first-order scheme treats the wave as constant within each cell. That approximation has a visible consequence: it produces a reflection at a perfectly matched load, where physics says nothing should come back. On a tool whose entire job is to interpret reflections, an artefact that looks exactly like a fault is not acceptable.</p>
+
+    <p>Evaluating the current at half-integer points in both space and time removes it. Same pulse, same matched load, both schemes:</p>
+
+    <div class="pair">
+      <figure>
+        <img src="../assets/fdtd_first_order.png" alt="First-order scheme: a small parasitic reflection returns from the matched load">
+        <figcaption>First order. A small wave comes back from a load that should reflect nothing.</figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/fdtd_second_order.png" alt="Second-order scheme: nothing returns from the matched load">
+        <figcaption>Second order. Nothing returns, as it should be.</figcaption>
+      </figure>
+    </div>
+
+    <p>The first-order solver is kept in the repository anyway. It is the version that made the second one possible, and it is far easier to read.</p>
+
+    <h3>Turning an echo into a distance</h3>
+
+    <p>The measured signal is the voltage at the injection point: the outgoing pulse, then whatever returns. Reflections are isolated by thresholding and segmenting the trace into events, and three methods then convert an event into a position.</p>
+
+    <ul>
+      <li><b>Direct wave speed.</b> Round-trip time divided by two, times the propagation speed. Simplest, and assumes the fault does not change that speed.</li>
+      <li><b>End-reflection calibration.</b> The echo from the far end is identified, and every other reflection is expressed as a ratio of it. This calibrates against a measured echo instead of a nominal speed, which absorbs discretization error.</li>
+      <li><b>Entry and exit pairing.</b> A fault of finite length reflects twice — once going in, once coming out. Matching the two gives the fault's <em>physical extent</em>, not just its position. Later echoes spaced at the same interval are recognized as internal reverberations, so they are not counted as extra faults.</li>
+    </ul>
+
+    <p>The tool picks between them automatically depending on which cable parameters differ across sections.</p>
+
+    <h2>Frequency domain: reading the spectrum instead</h2>
+
+    <p>The second module never runs a transient at all. It sweeps a sinusoid across a band and computes the steady-state reflection coefficient analytically, cascading an ABCD matrix per cable segment. This mirrors what a vector network analyzer measures on a real cable, which is what makes it directly relevant to EDF practice.</p>
+
+    <p>A real cable reflects a little even when healthy, from connectors and residual mismatch. The fault contribution is isolated by computing the response twice and subtracting — in the complex domain, not in magnitude:</p>
+
+    <div class="eq">
+      <div>$$\Delta S_{11}(f) = S_{11}^{\text{faulty}}(f) - S_{11}^{\text{healthy}}(f)$$</div>
+      <p class="eq-note">Subtracting magnitudes would be a mistake. It is the phase of S₁₁ that carries the round-trip delay, so a magnitude-only subtraction throws away all the distance information.</p>
+    </div>
+
+    <p>A fault at depth <em>d</em> makes S₁₁ oscillate in frequency at a rate proportional to that depth — one at 30 m oscillates twice as fast as one at 15 m. An inverse Fourier transform turns that spectrum back into a distance-domain reflectogram, where the fault is simply a peak.</p>
+
+    <p>Two limits govern what can be seen, and both are drawn directly on the plot so the user knows what the measurement can and cannot resolve:</p>
+
+    <div class="eq">
+      <div>$$\text{resolution} \quad \Delta x = \frac{v_p}{2B} \qquad\qquad \text{unambiguous range} \quad x_{\max} = \frac{v_p}{2\,\delta f}$$</div>
+      <p class="eq-note">Wider bandwidth buys finer resolution; denser sampling buys longer range. Zero-padding makes the curve smoother but resolves nothing new — a distinction worth making visible.</p>
+    </div>
+
+    <h2>Which method to reach for</h2>
+
+    <p>The comparison turned out to be one of the more useful outputs of the project. For a resistive fault, where inductance and capacitance are unchanged and the mismatch is weak, the frequency domain is clearly easier: baseline subtraction isolates the fault cleanly, while the time domain needs careful threshold tuning to lift a small reflection out of the emitted pulse. The time domain, on the other hand, shows you what is physically happening, which matters when the point is to build intuition.</p>
+
+    <h2>Validation</h2>
+
+    <p>Two routes. Cable configurations published in an EDF internship report and in doctoral theses were reproduced and compared against their results — reflection timing, amplitude and spatial extent all matched. And the industrial supervisor at EDF reviewed intermediate outputs throughout, checking simulated behaviour against what she sees on real cables.</p>
+
+    <div class="pair">
+      <figure>
+        <img src="../assets/validation_first_order.png" alt="Simulated voltage at the injection point, first-order scheme, 10 ohm load">
+        <figcaption>Capacitance and inductance fault mid-cable, 10 Ω load, first order.</figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/validation_second_order.png" alt="Simulated voltage at the injection point, second-order scheme, 10 ohm load">
+        <figcaption>Same configuration, second order. Cleaner separation of entry and exit reflections.</figcaption>
+      </figure>
+    </div>
+
+    <h2>What it does not do</h2>
+
+    <p>The solver is one-dimensional and assumes a uniform line. Dielectric dispersion, connector reflections and cross-talk between conductors in a bundle are all absent. The frequency module assumes a perfectly known healthy baseline, which in a real measurement carries noise, calibration error and drift — so the accuracy figures here are an upper bound, not a field expectation. And the tool models one straight cable, where EDF's real networks are branched topologies with junctions and mixed cable types.</p>
+
+    <p>The extension with the most leverage would be generating synthetic datasets at scale — varying length, parameters, fault type, position and severity, each with its ground-truth label — as training data for automated diagnosis. That was EDF's interest in the project from the start.</p>
+
+  </section>
+
+  <p class="next"><a href="ev-battery.html">Next project → EV battery range model</a></p>
+
+</main>
+
+<footer class="wrap">
+  Built and hosted on GitHub Pages.
+</footer>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+</body>
+</html>

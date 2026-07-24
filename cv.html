@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV — Hanaé Frotier de Bagneux</title>
+<meta name="description" content="Curriculum vitae: electrical engineering at CentraleSupélec and McGill, research projects with EDF R&D, internship at ArianeGroup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="wrap masthead">
+  <a class="home" href="index.html">← Hanaé Frotier de Bagneux</a>
+  <nav>
+    <a href="index.html#projects">Projects</a>
+    <a href="cv.html">CV</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="band band--tight project-head">
+    <p class="eyebrow">Curriculum vitae</p>
+    <h1>Electrical engineering, control systems, signal processing.</h1>
+    <p class="lede">Second-year engineering student at CentraleSupélec, joining McGill University this fall. Two research projects with EDF R&amp;D, currently interning at ArianeGroup.</p>
+
+    <ul class="actions">
+      <li><a class="btn btn--primary" href="#">Download as PDF</a></li>
+      <li><a class="btn" href="mailto:hdebagneux@gmail.com">hdebagneux@gmail.com</a></li>
+      <li><a class="btn" href="https://github.com/hdebagneux">GitHub</a></li>
+      <li><a class="btn" href="#">LinkedIn</a></li>
+    </ul>
+  </section>
+
+  <section class="cv-section">
+    <h2>Education</h2>
+
+    <div class="cv-entry">
+      <div class="when">2026 — 2029</div>
+      <div class="what">
+        <h3>McGill University <span>Montreal, Canada</span></h3>
+        <p>BEng, Electrical Engineering. Incoming undergraduate, starting fall 2026.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">2024 — 2026</div>
+      <div class="what">
+        <h3>CentraleSupélec <span>Gif-sur-Yvette, France</span></h3>
+        <p>Bachelor of Global Engineering, electrical engineering concentration. Joint programme with McGill University.</p>
+        <p class="detail">Coursework: signal processing, control systems, electromagnetism, probability and statistics, machine learning, numerical methods, economics of corporations.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cv-section">
+    <h2>Experience</h2>
+
+    <div class="cv-entry">
+      <div class="when">Jun — Aug 2026</div>
+      <div class="what">
+        <h3>ArianeGroup <span>Vernon, France</span></h3>
+        <p class="role">Intern, Ground Systems — Control Systems</p>
+        <p>Built an inventory management system for a laboratory stockroom from scratch: a ten-category parts taxonomy, 34 storage locations, barcode labelling and scanner configuration, and a touchscreen kiosk workstation on the local network.</p>
+        <p>Wrote a Python tool against the inventory REST API to automate bulk operations, after evaluating and rejecting an RPA solution as unnecessarily heavy. Delivered standard operating procedures for the warehouse team.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">Feb — Jun 2026</div>
+      <div class="what">
+        <h3>EDF R&amp;D <span>Research project</span></h3>
+        <p class="role">Cable fault detection — six-month project, four people</p>
+        <p>Built an interactive reflectometry simulator locating faults in electrical cables in both the time and frequency domains, reaching around 1&nbsp;% localization accuracy. Deployed as a web application.</p>
+        <p class="detail"><a href="projects/cable-fault.html">Read the project page</a> · <a href="https://cablefault-ehi3c5lqxdnre9q4bmhjii.streamlit.app/">Live tool</a></p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">2026</div>
+      <div class="what">
+        <h3>EDF R&amp;D <span>Data and Modelling Weeks</span></h3>
+        <p class="role">Electric vehicle battery modelling</p>
+        <p>Identified an equivalent circuit model from laboratory cell data, scaled it to a full battery pack, and coupled it with a longitudinal vehicle model to predict driving range over the WLTP cycle.</p>
+        <p class="detail"><a href="projects/ev-battery.html">Read the project page</a></p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">[dates]</div>
+      <div class="what">
+        <h3>Harel Mallac <span>Mauritius</span></h3>
+        <p class="role">Intern, solar energy</p>
+        <p>[One or two lines on what you did there — sizing, measurement, reporting. Keep it concrete.]</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">Nov 2025</div>
+      <div class="what">
+        <h3>Robotics bootcamp <span>CentraleSupélec</span></h3>
+        <p>Two-week intensive: an autonomous line-following robot combining a PID controller with breadth-first path planning.</p>
+        <p class="detail"><a href="projects/line-robot.html">Read the project page</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cv-section">
+    <h2>Skills</h2>
+
+    <div class="cv-entry">
+      <div class="when">Languages</div>
+      <div class="what">
+        <p>Python (NumPy, SciPy, Matplotlib, Streamlit), MATLAB, LaTeX. [Add anything else you actually use — C, Arduino, SQL.]</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">Methods</div>
+      <div class="what">
+        <p>Numerical simulation (finite differences, time and frequency domain analysis), control (PID tuning, state estimation), equivalent circuit modelling, parameter identification from experimental data, machine learning fundamentals.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">Tools</div>
+      <div class="what">
+        <p>Git, REST APIs, Streamlit, Office suite. Technical reporting and documentation in French and English.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="when">Spoken</div>
+      <div class="what">
+        <p>French — native. English — fluent, studying and writing in it. [Add others if relevant.]</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cv-section">
+    <h2>Interests</h2>
+    <div class="cv-entry">
+      <div class="when"></div>
+      <div class="what">
+        <p>Space systems, orbital debris in particular. Robotics and control. Plasma physics, which I am currently reading into with a view to research at McGill.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="next"><a href="index.html#projects">← Back to projects</a></p>
+
+</main>
+
+<footer class="wrap">
+  Built and hosted on GitHub Pages.
+</footer>
+
+</body>
+</html>
