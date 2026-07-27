@@ -556,6 +556,8 @@ table.data th { color: var(--graphite); font-weight: 500; }
   margin-top: 2rem;
 }
 
+a.pill { text-decoration: none; }
+
 .pill {
   font-family: var(--f-mono);
   font-size: 0.82rem;
