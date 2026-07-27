@@ -15,9 +15,9 @@
 <header class="wrap masthead">
   <span class="home">Hanaé Frotier de Bagneux</span>
   <nav>
-    <a href="#projects">Projects</a>
+    <a href="#" data-reveal="projects">Projects</a>
     <a href="cv.html">CV</a>
-    <a href="#background">Background</a>
+    <a href="#" data-reveal="experience">Experience</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
@@ -38,6 +38,11 @@
         Interested in robotics, autonomous systems, and space
         technologies.
       </p>
+
+      <div class="hero-buttons">
+        <button class="pill" data-reveal="projects" aria-expanded="false" aria-controls="projects">Projects</button>
+        <button class="pill" data-reveal="experience" aria-expanded="false" aria-controls="experience">Professional experience</button>
+      </div>
     </div>
 
     <div class="hero-photo">
@@ -45,7 +50,7 @@
     </div>
   </section>
 
-  <section class="wrap band" id="projects">
+  <section class="wrap band rule-top panel" id="projects" hidden>
     <p class="eyebrow">Projects</p>
 
     <div class="projects">
@@ -81,21 +86,21 @@
     </div>
   </section>
 
-  <section class="wrap band rule-top" id="background">
-    <p class="eyebrow">Background</p>
+  <section class="wrap band rule-top panel" id="experience" hidden>
+    <p class="eyebrow">Professional experience</p>
 
     <div class="cols">
       <div>
+        <h3>ArianeGroup</h3>
+        <p>Currently interning on inventory automation: a parts taxonomy, barcode labelling, a scanner-driven kiosk, and a Python tool that talks to the stock database so nobody has to.</p>
+      </div>
+      <div>
+        <h3>EDF R&amp;D</h3>
+        <p>Two research projects — a cable-fault reflectometry simulator and an electric-vehicle battery range model — both carried out in partnership with EDF's research division.</p>
+      </div>
+      <div>
         <h3>Studying</h3>
         <p>Bachelor of Global Engineering at CentraleSupélec, electrical engineering concentration, in a joint programme with McGill University. Moving to Montreal this fall.</p>
-      </div>
-      <div>
-        <h3>Working on</h3>
-        <p>Inventory automation at ArianeGroup: a parts taxonomy, barcode labelling, a scanner-driven kiosk, and a Python tool that talks to the stock database so nobody has to.</p>
-      </div>
-      <div>
-        <h3>Interested in</h3>
-        <p>Control systems and robotics, signal processing and numerical methods, and the space sector — orbital debris above all, which is what made me want to work in it.</p>
       </div>
       <div>
         <h3>Working languages</h3>
@@ -120,6 +125,27 @@
 <footer class="wrap">
   Built and hosted on GitHub Pages.
 </footer>
+
+<script>
+  document.querySelectorAll('[data-reveal]').forEach(function (trigger) {
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      var panel = document.getElementById(trigger.dataset.reveal);
+      if (!panel) return;
+      var show = panel.hasAttribute('hidden');
+      if (show) {
+        panel.removeAttribute('hidden');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+      document.querySelectorAll('[data-reveal="' + trigger.dataset.reveal + '"]')
+        .forEach(function (b) {
+          if (b.hasAttribute('aria-expanded')) b.setAttribute('aria-expanded', String(show));
+        });
+    });
+  });
+</script>
 
 </body>
 </html>
