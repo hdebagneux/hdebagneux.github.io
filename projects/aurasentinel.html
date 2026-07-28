@@ -26,7 +26,7 @@
   <section class="band band--tight project-head">
     <p class="eyebrow">Team project · Behavioural safety</p>
     <h1>Reading the tension in a room without ever recognising a face.</h1>
-    <p class="lede">Shops deal with three recurring problems &mdash; aggression, medical incidents and theft &mdash; and almost all of them are noticed too late, once things have already escalated. AuraSentinel watches for the signals that come <em>before</em> an incident, and buys trained staff a few seconds to act.</p>
+    <p class="lede">Shops deal with three recurring problems , aggression, medical incidents and theft , and almost all of them are noticed too late, once things have already escalated. AuraSentinel watches for the signals that come <em>before</em> an incident, and buys trained staff a few seconds to act.</p>
 
     <dl class="factsheet">
       <div><dt>Context</dt><dd>Bachelor of Global Engineering<br>CentraleSupélec × McGill</dd></div>
@@ -50,9 +50,9 @@
 
     <h2>The problem</h2>
 
-    <p>A study in Île-de-France found that 94&nbsp;% of cashiers had suffered some form of external aggression; the retail sector logged over 33,000 recognised workplace accidents in a single year, and tens of thousands of shoplifting incidents on top of that. Existing tools focus almost entirely on theft &mdash; a suspicious gesture near a shelf. They say nothing about a fight breaking out, or someone collapsing in an aisle.</p>
+    <p>A study in Île-de-France found that 94&nbsp;% of cashiers had suffered some form of external aggression; the retail sector logged over 33,000 recognised workplace accidents in a single year, and tens of thousands of shoplifting incidents on top of that. Existing tools focus almost entirely on theft , a suspicious gesture near a shelf. They say nothing about a fight breaking out, or someone collapsing in an aisle.</p>
 
-    <p>We set ourselves a harder brief: detect <em>behavioural</em> risk &mdash; tension, aggression, distress, a fall &mdash; in real time, and do it without turning the shop into a face-recognition panopticon. The privacy constraint was not an afterthought; it shaped the whole architecture.</p>
+    <p>We set ourselves a harder brief: detect <em>behavioural</em> risk , tension, aggression, distress, a fall , in real time, and do it without turning the shop into a face-recognition panopticon. The privacy constraint was not an afterthought; it shaped the whole architecture.</p>
 
     <div class="result">
       <span class="num">0</span>
@@ -65,7 +65,7 @@
 
     <h3>The visual channel</h3>
 
-    <p>YOLOv8 tracks each person across frames, and MediaPipe Pose reduces every one of them to a 33-point skeleton &mdash; no faces, no expressions, just joint coordinates. The visual scorer then reads tension out of posture and motion: raised arms, sudden speed, a torso leaning into someone else. Below, the prototype flags an altercation with a tension score of 0.9.</p>
+    <p>YOLOv8 tracks each person across frames, and MediaPipe Pose reduces every one of them to a 33-point skeleton , no faces, no expressions, just joint coordinates. The visual scorer then reads tension out of posture and motion: raised arms, sudden speed, a torso leaning into someone else. Below, the prototype flags an altercation with a tension score of 0.9.</p>
 
     <figure>
       <img src="https://raw.githubusercontent.com/hdebagneux/AuraSentinel-AI-Surveillance-System/main/ai-prototype.png" alt="Prototype interface analysing CCTV footage of an altercation, with a skeleton overlaid on the tracked person and a tension score of 0.9">
@@ -74,11 +74,11 @@
 
     <h3>The acoustic channel</h3>
 
-    <p>Audio is anonymised the moment it is captured. A non-reversible pitch and formant shift erases any recognisable voiceprint while keeping what actually matters for detection &mdash; energy, pitch variance, spectral flux, the acoustic shape of a raised or panicked voice. The model never hears the words or the speaker, only the tension in the sound.</p>
+    <p>Audio is anonymised the moment it is captured. A non-reversible pitch and formant shift erases any recognisable voiceprint while keeping what actually matters for detection , energy, pitch variance, spectral flux, the acoustic shape of a raised or panicked voice. The model never hears the words or the speaker, only the tension in the sound.</p>
 
     <h2>The alert loop</h2>
 
-    <p>Alerts land on a staff device, prioritised HIGH / MEDIUM / LOW with the aisle and a one-tap response. Staff can take charge of a situation (so two people don't converge on the same alert), mark it resolved, or escalate to emergency services directly. Crucially, they also rate whether the alert was accurate &mdash; and that judgement is what teaches the system.</p>
+    <p>Alerts land on a staff device, prioritised HIGH / MEDIUM / LOW with the aisle and a one-tap response. Staff can take charge of a situation (so two people don't converge on the same alert), mark it resolved, or escalate to emergency services directly. Crucially, they also rate whether the alert was accurate , and that judgement is what teaches the system.</p>
 
     <figure>
       <img src="https://raw.githubusercontent.com/hdebagneux/AuraSentinel-AI-Surveillance-System/main/pda-prototype.png" alt="Staff app screens: a prioritised alert list, a resolution screen, an emergency-call screen, and an accuracy-rating screen">
@@ -87,15 +87,15 @@
 
     <h2>Learning without collecting</h2>
 
-    <p>Each store trains its own copy of the tension classifier on its own confirmed and rejected alerts, so no raw data leaves the node. A central server merges only the weight updates with federated averaging (FedAvg) into a global model that every store inherits. In our multi-store simulation, accuracy climbs from around 60&nbsp;% to 78&nbsp;% over five rounds &mdash; the loop works, even if the numbers are on synthetic feedback for now.</p>
+    <p>Each store trains its own copy of the tension classifier on its own confirmed and rejected alerts, so no raw data leaves the node. A central server merges only the weight updates with federated averaging (FedAvg) into a global model that every store inherits. In our multi-store simulation, accuracy climbs from around 60&nbsp;% to 78&nbsp;% over five rounds , the loop works, even if the numbers are on synthetic feedback for now.</p>
 
     <h2>Taking the bias seriously</h2>
 
-    <p>A system that flags "tension" can very easily learn to flag <em>people</em> &mdash; young men, certain clothing, certain accents &mdash; if the training data or the human labels are skewed. Rather than wave this away, we wrote a full evaluation of where bias enters (dataset, labelling, feedback loops, camera placement, model architecture) and what it does downstream: discriminatory alerts, over-policing, loss of trust, and real GDPR and anti-discrimination exposure for the retailer. The mitigation plan &mdash; diverse audited datasets, human override, fairness metrics across demographics, third-party audits, transparent scoring &mdash; is written up alongside the GDPR-compliant data clause in the report.</p>
+    <p>A system that flags "tension" can very easily learn to flag <em>people</em> , young men, certain clothing, certain accents , if the training data or the human labels are skewed. Rather than wave this away, we wrote a full evaluation of where bias enters (dataset, labelling, feedback loops, camera placement, model architecture) and what it does downstream: discriminatory alerts, over-policing, loss of trust, and real GDPR and anti-discrimination exposure for the retailer. The mitigation plan, diverse audited datasets, human override, fairness metrics across demographics, third-party audits, transparent scoring , is written up alongside the GDPR-compliant data clause in the report.</p>
 
     <h2>What it does not do</h2>
 
-    <p>This is a proof of concept, and it is honest about it. The tension scorer relies on hand-tuned thresholds rather than a trained detector; the federated results run on synthetic feedback; and none of it has been evaluated in a live store. The privacy architecture is designed for GDPR compliance under Article 6(1)(f), but a real deployment would need a proper Data Protection Impact Assessment, on-site signage, and the fairness auditing described above actually carried out &mdash; not just planned.</p>
+    <p>This is a proof of concept, and it is honest about it. The tension scorer relies on hand-tuned thresholds rather than a trained detector; the federated results run on synthetic feedback; and none of it has been evaluated in a live store. The privacy architecture is designed for GDPR compliance under Article 6(1)(f), but a real deployment would need a proper Data Protection Impact Assessment, on-site signage, and the fairness auditing described above actually carried out, not just planned.</p>
 
   </section>
 
