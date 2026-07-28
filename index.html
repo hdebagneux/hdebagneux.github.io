@@ -15,41 +15,67 @@
 <header class="wrap masthead">
   <span class="home">Hanaé Frotier de Bagneux</span>
   <nav>
-    <a href="#" data-reveal="projects">Projects</a>
+    <a href="#projects">Projects</a>
     <a href="cv.html">CV</a>
+    <a href="#background">Background</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
 
 <main>
 
-  <section class="wrap hero">
-    <div class="hero-text">
-      <p class="eyebrow">Electrical Engineering</p>
+  <section class="wrap band hero">
+    <h1>I build physical models that end up as software you can run.</h1>
 
-      <h1>Hanaé Frotier de Bagneux</h1>
+    <p class="lede">I'm a second-year engineering student at CentraleSupélec, specialising in electrical engineering, and I'm joining McGill this fall to continue in that direction.</p>
 
-      <p class="lead">
-        Third-year Global Engineering student at
-        <strong>CentraleSupélec</strong> &amp;
-        <strong>McGill University</strong>, specializing in
-        Electrical Engineering.
-        Interested in robotics, autonomous systems, and space
-        technologies.
-      </p>
+    <p class="lede">Most of my work starts from physics — a transmission line, a battery cell, a robot that has to stay on a track — and ends as a tool someone else can pick up. Control systems and signal processing are where I'm most at home. Space is where I'd like to end up, orbital debris in particular: the problem that pulled me into the sector in the first place.</p>
 
-      <div class="hero-buttons">
-        <button class="pill" data-reveal="projects" aria-expanded="false" aria-controls="projects">Projects</button>
-        <a class="pill" href="cv.html">CV</a>
-      </div>
-    </div>
+    <p class="now"><b>Now:</b> deploying an inventory management system at ArianeGroup, Vernon propulsion site. Python, REST API, and a stockroom that badly needed one.</p>
 
-    <div class="hero-photo">
-      <img src="assets/portrait.jpg" alt="Portrait of Hanaé Frotier de Bagneux" width="720" height="720">
+    <div class="scope">
+      <figure aria-hidden="true">
+        <svg viewBox="0 0 1000 330" role="img">
+          <g class="grid">
+            <line x1="15" y1="60" x2="985" y2="60"/>
+            <line x1="15" y1="125" x2="985" y2="125"/>
+            <line x1="15" y1="255" x2="985" y2="255"/>
+          </g>
+
+          <line class="axis" x1="15" y1="190" x2="985" y2="190"/>
+
+          <path class="trace" d="M 15 190 L 60 190 C 68 190 70 34 78 34 C 86 34 88 190 96 190 L 355 190 C 365 190 367 112 375 112 C 383 112 385 190 393 190 L 600 190 C 610 190 612 252 620 252 C 628 252 630 190 638 190 L 830 190 C 840 190 842 138 850 138 C 858 138 860 190 868 190 L 985 190"/>
+
+          <text class="echo-label" x="78" y="214">signal in</text>
+          <text class="echo-label" x="985" y="214" text-anchor="end">distance</text>
+
+          <a class="echo" href="projects/cable-fault.html" tabindex="-1">
+            <line class="echo-drop" x1="375" y1="112" x2="375" y2="282"/>
+            <circle class="echo-dot" cx="375" cy="112" r="4.5"/>
+            <text class="echo-label" x="375" y="300">Cable fault<tspan x="375" dy="16">detection</tspan></text>
+            <rect class="echo-hit" x="325" y="90" width="100" height="230"/>
+          </a>
+
+          <a class="echo" href="projects/ev-battery.html" tabindex="-1">
+            <line class="echo-drop" x1="620" y1="252" x2="620" y2="282"/>
+            <circle class="echo-dot is-fault" cx="620" cy="252" r="4.5"/>
+            <text class="echo-label" x="620" y="300">EV battery<tspan x="620" dy="16">range model</tspan></text>
+            <rect class="echo-hit" x="570" y="190" width="100" height="130"/>
+          </a>
+
+          <a class="echo" href="projects/line-robot.html" tabindex="-1">
+            <line class="echo-drop" x1="850" y1="138" x2="850" y2="282"/>
+            <circle class="echo-dot" cx="850" cy="138" r="4.5"/>
+            <text class="echo-label" x="850" y="300">Line-following<tspan x="850" dy="16">robot</tspan></text>
+            <rect class="echo-hit" x="800" y="116" width="100" height="204"/>
+          </a>
+        </svg>
+        <figcaption>A reflectogram: a pulse goes down a cable, and every discontinuity sends part of it back. Reading those echoes is what my main project does. Here they are three of them.</figcaption>
+      </figure>
     </div>
   </section>
 
-  <section class="wrap band rule-top panel" id="projects" hidden>
+  <section class="wrap band" id="projects">
     <p class="eyebrow">Projects</p>
 
     <div class="projects">
@@ -85,6 +111,29 @@
     </div>
   </section>
 
+  <section class="wrap band rule-top" id="background">
+    <p class="eyebrow">Background</p>
+
+    <div class="cols">
+      <div>
+        <h3>Studying</h3>
+        <p>Bachelor of Global Engineering at CentraleSupélec, electrical engineering concentration, in a joint programme with McGill University. Moving to Montreal this fall.</p>
+      </div>
+      <div>
+        <h3>Working on</h3>
+        <p>Inventory automation at ArianeGroup: a parts taxonomy, barcode labelling, a scanner-driven kiosk, and a Python tool that talks to the stock database so nobody has to.</p>
+      </div>
+      <div>
+        <h3>Interested in</h3>
+        <p>Control systems and robotics, signal processing and numerical methods, and the space sector — orbital debris above all, which is what made me want to work in it.</p>
+      </div>
+      <div>
+        <h3>Working languages</h3>
+        <p>French and English, both fluent. Reports, code and documentation in either.</p>
+      </div>
+    </div>
+  </section>
+
   <section class="wrap band rule-top" id="contact">
     <p class="eyebrow">Contact</p>
     <h2>Open to research and internship opportunities.</h2>
@@ -101,27 +150,6 @@
 <footer class="wrap">
   Built and hosted on GitHub Pages.
 </footer>
-
-<script>
-  document.querySelectorAll('[data-reveal]').forEach(function (trigger) {
-    trigger.addEventListener('click', function (e) {
-      e.preventDefault();
-      var panel = document.getElementById(trigger.dataset.reveal);
-      if (!panel) return;
-      var show = panel.hasAttribute('hidden');
-      if (show) {
-        panel.removeAttribute('hidden');
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        panel.setAttribute('hidden', '');
-      }
-      document.querySelectorAll('[data-reveal="' + trigger.dataset.reveal + '"]')
-        .forEach(function (b) {
-          if (b.hasAttribute('aria-expanded')) b.setAttribute('aria-expanded', String(show));
-        });
-    });
-  });
-</script>
 
 </body>
 </html>
