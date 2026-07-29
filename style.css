@@ -1,23 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..48,500;12..48,600;12..48,700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 /* ============================================================
    Hanaé Frotier de Bagneux — portfolio
    Direction: instrumentation / signal. White field, emerald
    signal accent, one warm marker reserved for "events".
-   Display: Space Grotesk · Body: IBM Plex Sans · Data: IBM Plex Mono
+   Display: Bricolage Grotesque · Body: Newsreader · Data: JetBrains Mono
    ============================================================ */
 
 :root {
   --bg:           #FFFFFF;
-  --surface:      #F5F8F6;   /* faint cool-green tint for cards / bands */
+  --surface:      #F5F8F6;   /* faint cool-green tint for cards */
   --ink:          #111A16;   /* near-black, cool */
-  --graphite:     #5A6963;   /* secondary text */
-  --rule:         #E4EAE6;   /* hairline */
+  --graphite:     #58665F;   /* secondary text */
+  --rule:         #E3E9E5;   /* hairline */
 
   --signal:       #0C7A4C;   /* emerald — links, accents (AA on white) */
-  --signal-bright:#13A063;   /* brighter emerald — bars, fills, decoration */
+  --signal-bright:#13A063;   /* brighter emerald — decoration */
   --signal-ink:   #095C39;   /* hover / active */
-  --signal-soft:  #E7F4EC;   /* wash for hover backgrounds */
+  --signal-soft:  #E7F4EC;   /* wash (used very sparingly) */
   --marker:       #E4572E;   /* warm marker — faults & live demos only */
 
   --measure: 36rem;
@@ -25,9 +25,9 @@
   --radius: 12px;
   --radius-sm: 9px;
 
-  --f-display: "Space Grotesk", system-ui, sans-serif;
-  --f-body: "IBM Plex Sans", system-ui, sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --f-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --f-body: "Newsreader", Georgia, serif;
+  --f-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -41,8 +41,8 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--f-body);
-  font-size: clamp(1rem, 0.97rem + 0.16vw, 1.08rem);
-  line-height: 1.62;
+  font-size: clamp(1.03rem, 1rem + 0.18vw, 1.14rem);
+  line-height: 1.66;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -86,15 +86,16 @@ a { color: inherit; }
 h1, h2, h3 {
   font-family: var(--f-display);
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  letter-spacing: -0.015em;
+  line-height: 1.06;
   margin: 0;
 }
 
 .eyebrow {
   font-family: var(--f-mono);
   font-size: 0.7rem;
-  letter-spacing: 0.18em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--signal);
   margin: 0 0 1.1rem;
@@ -112,7 +113,8 @@ h1, h2, h3 {
 
 .lede {
   max-width: var(--measure);
-  font-size: 1.12em;
+  font-size: 1.16em;
+  line-height: 1.55;
   color: var(--ink);
 }
 
@@ -128,7 +130,7 @@ p { max-width: var(--measure); }
   align-items: baseline;
   justify-content: space-between;
   font-family: var(--f-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
 }
 
 .masthead a { color: var(--graphite); text-decoration: none; transition: color 160ms var(--ease); }
@@ -147,15 +149,16 @@ p { max-width: var(--measure); }
 }
 
 .hero h1 {
-  font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3rem);
-  font-weight: 600;
-  max-width: 16ch;
+  font-size: clamp(2rem, 1.2rem + 2.8vw, 3.25rem);
+  font-weight: 700;
+  max-width: 15ch;
   margin-bottom: 1.5rem;
 }
 
 .hero .lead {
   max-width: var(--measure);
-  font-size: 1.08em;
+  font-size: 1.12em;
+  line-height: 1.55;
 }
 
 .hero .lead strong { font-weight: 600; color: var(--signal-ink); }
@@ -182,6 +185,44 @@ p { max-width: var(--measure); }
 @media (max-width: 44rem) {
   .hero { grid-template-columns: 1fr; }
   .hero-photo img { max-width: 11rem; }
+}
+
+/* ---------- hero CTAs: text links, not buttons ---------- */
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.6rem;
+  margin-top: 2.2rem;
+}
+
+a.pill { text-decoration: none; }
+
+.pill {
+  font-family: var(--f-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  padding: 0.2rem 0;
+  cursor: pointer;
+  background-image: linear-gradient(var(--signal), var(--signal));
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 240ms var(--ease), color 160ms var(--ease);
+}
+
+/* directional cue: ↓ reveals the panel below, → navigates away */
+.pill[data-reveal]::after { content: "  ↓"; color: var(--signal); }
+a.pill::after { content: "  →"; color: var(--signal); }
+
+.pill:hover,
+.pill[aria-expanded="true"] {
+  color: var(--signal);
+  background-size: 100% 1.5px;
 }
 
 /* ---------- signature: the reflectogram ---------- */
@@ -264,45 +305,60 @@ p { max-width: var(--measure); }
 .project {
   position: relative;
   background: var(--bg);
-  padding: clamp(1.6rem, 3vw, 2.4rem) clamp(1rem, 2vw, 1.4rem);
+  padding: clamp(1.6rem, 3vw, 2.4rem) 0;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.7rem;
   text-decoration: none;
-  transition: background 200ms var(--ease), transform 200ms var(--ease);
+  transition: padding-left 260ms var(--ease);
 }
 
-/* growing signal bar on hover — the list's signature interaction */
+/* thin signal bar that draws down the left edge on hover — no fill */
 .project::before {
   content: "";
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--signal-bright);
+  width: 2px;
+  background: var(--signal);
   transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 240ms var(--ease);
+  transform-origin: center;
+  transition: transform 300ms var(--ease);
 }
 
-.project:hover, .project:focus-visible {
-  background: var(--signal-soft);
-  transform: translateX(4px);
-}
+.project:hover, .project:focus-visible { padding-left: 1.15rem; }
 .project:hover::before, .project:focus-visible::before { transform: scaleY(1); }
 
+/* title: an underline draws in and an arrow slides out — the interaction */
 .project h3 {
+  font-family: var(--f-display);
   font-size: clamp(1.35rem, 1.1rem + 1vw, 1.8rem);
   font-weight: 600;
-  transition: color 200ms var(--ease);
+  justify-self: start;
+  background-image: linear-gradient(var(--signal), var(--signal));
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 280ms var(--ease);
 }
-.project:hover h3, .project:focus-visible h3 { color: var(--signal-ink); }
+
+.project h3::after {
+  content: "  \2192";
+  display: inline-block;
+  color: var(--signal);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 240ms var(--ease), transform 240ms var(--ease);
+}
+
+.project:hover h3, .project:focus-visible h3 { background-size: 100% 2px; }
+.project:hover h3::after, .project:focus-visible h3::after { opacity: 1; transform: translateX(2px); }
 
 .project p { margin: 0; color: var(--graphite); max-width: 46rem; }
 
 .project .meta {
   font-family: var(--f-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   color: var(--graphite);
   display: flex;
   flex-wrap: wrap;
@@ -349,7 +405,7 @@ p { max-width: var(--measure); }
   flex-wrap: wrap;
   gap: 0.8rem 2rem;
   font-family: var(--f-mono);
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   margin-top: 1.4rem;
   padding: 0;
   list-style: none;
@@ -379,7 +435,8 @@ footer {
    ============================================================ */
 
 .project-head h1 {
-  font-size: clamp(2rem, 1.3rem + 3vw, 3.2rem);
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.3rem);
+  font-weight: 700;
   max-width: 18ch;
   margin-bottom: 1.3rem;
 }
@@ -443,7 +500,7 @@ footer {
 .btn--primary:hover { background: var(--signal-ink); border-color: var(--signal-ink); color: #fff; }
 
 .prose h2 {
-  font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 1.85rem);
   margin-top: clamp(2.8rem, 5vw, 4rem);
   margin-bottom: 1rem;
   font-weight: 600;
@@ -606,13 +663,13 @@ table.data tr:hover td { background: var(--signal-soft); }
   font-family: var(--f-mono);
   font-size: 0.75rem;
   color: var(--graphite);
-  padding-top: 0.35rem;
+  padding-top: 0.45rem;
   line-height: 1.5;
 }
 
 .cv-entry .what h3 {
   font-family: var(--f-display);
-  font-size: 1.12rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0.45rem;
 }
@@ -658,40 +715,7 @@ table.data tr:hover td { background: var(--signal-soft); }
   .cv-entry .what h3 span { display: block; margin-left: 0; margin-top: 0.2rem; }
 }
 
-/* ---------- hero buttons + reveal panels ---------- */
-
-.hero-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 2rem;
-}
-
-a.pill { text-decoration: none; }
-
-.pill {
-  font-family: var(--f-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-  background: var(--bg);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-sm);
-  padding: 0.7rem 1.3rem;
-  cursor: pointer;
-  transition: border-color 160ms var(--ease), color 160ms var(--ease), background 160ms var(--ease), transform 160ms var(--ease);
-}
-
-.pill:hover,
-.pill[aria-expanded="true"] {
-  border-color: var(--signal);
-  color: var(--signal);
-  transform: translateY(-2px);
-}
-
-.pill[aria-expanded="true"] {
-  background: var(--signal-soft);
-}
+/* ---------- reveal panels ---------- */
 
 .panel[hidden] { display: none; }
 
