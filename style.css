@@ -171,15 +171,26 @@ p { max-width: var(--measure); }
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid var(--rule);
-  box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--signal-soft);
+  padding: 5px;
+background: linear-gradient(
+    135deg,
+    #0C7A4C 0%,
+    #13A063 45%,
+    #7BE495 100%
+);
+border-radius: 50%;
   filter: saturate(0.98);
   transition: transform 300ms var(--ease), box-shadow 300ms var(--ease);
 }
 
 .hero-photo img:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--signal-bright);
+   transform: translateY(-3px);
+    background: linear-gradient(
+        135deg,
+        #13A063,
+        #1CC97A,
+        #9EF3C4
+    );
 }
 
 @media (max-width: 44rem) {
@@ -766,4 +777,9 @@ table.data tr:hover td { background: var(--signal-soft); }
 @keyframes reveal {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: none; }
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
