@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EV battery range model — Hanaé Frotier de Bagneux</title>
+<title>EV battery range model , Hanaé Frotier de Bagneux</title>
 <meta name="description" content="From a pulse test on a single lithium-ion cell to the driving range of an electric vehicle over the WLTP cycle. Modelling week with EDF R&D.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
   <section class="band band--tight project-head">
     <p class="eyebrow">Data and Modelling Weeks · EDF R&amp;D</p>
     <h1>How far can a car go, starting from one cell on a lab bench?</h1>
-    <p class="lede">A pulse test on a single lithium-ion cell gives you a voltage drop and a capacity. Turning that into a number of kilometres takes three models stacked on top of each other — and the interesting part is where the error ends up.</p>
+    <p class="lede">A pulse test on a single lithium-ion cell gives you a voltage drop and a capacity. Turning that into a number of kilometres takes three models stacked on top of each other , and the interesting part is where the error ends up.</p>
 
     <dl class="factsheet">
       <div><dt>Context</dt><dd>Data and Modelling Weeks<br>CentraleSupélec</dd></div>
@@ -52,7 +52,7 @@
 
     <div class="result">
       <span class="num">681 km</span>
-      <p>Predicted for a fresh pack, against 744 km announced by the manufacturer — an 8.5 % underestimate from a deliberately simple model.</p>
+      <p>Predicted for a fresh pack, against 744 km announced by the manufacturer , an 8.5 % underestimate from a deliberately simple model.</p>
     </div>
 
     <h2>What the vehicle asks of the battery</h2>
@@ -72,7 +72,7 @@
 
     <figure>
       <img src="../assets/battery_power_wltp.png" alt="Electrical power demanded at the battery terminals over the WLTP cycle">
-      <figcaption>Power demand across the cycle. The peaks — about 62 kW drawing, 23 kW recovering — are what set the sizing constraints for the pack.</figcaption>
+      <figcaption>Power demand across the cycle. The peaks , about 62 kW drawing, 23 kW recovering , are what set the sizing constraints for the pack.</figcaption>
     </figure>
 
     <h2>What the cell can give</h2>
@@ -96,7 +96,7 @@
       </figure>
     </div>
 
-    <p>That second observation matters more than it looks. Ageing changes capacity and resistance, but not the equilibrium voltage — which tells you which two quantities to track over a battery's life, and which one you can leave alone.</p>
+    <p>That second observation matters more than it looks. Ageing changes capacity and resistance, but not the equilibrium voltage , which tells you which two quantities to track over a battery's life, and which one you can leave alone.</p>
 
     <h2>Joining the two</h2>
 
@@ -111,7 +111,7 @@
 
     <p>Two independent constraints, each fixing one dimension. Voltage sets how many cells go in series: a 400 V architecture with cells swinging between 3.1 and 4.2 V gives 110. Energy sets how many strings go in parallel: 95 kWh of usable energy at roughly 222 Wh per cell needs about 428 cells, so 4 strings.</p>
 
-    <p>The result is checked under peak load. At the lowest pack voltage and worst-case resistance, the drop is around 7.5 V on a 400 V pack — negligible — and 45 A per cell, comfortably inside the range the characterization tests covered. The configuration holds.</p>
+    <p>The result is checked under peak load. At the lowest pack voltage and worst-case resistance, the drop is around 7.5 V on a 400 V pack , negligible , and 45 A per cell, comfortably inside the range the characterization tests covered. The configuration holds.</p>
 
     <table class="data">
       <tr><th>Series</th><td>110 cells</td></tr>
@@ -133,7 +133,7 @@
 
     <h2>Where the error actually is</h2>
 
-    <p>A one-at-a-time sensitivity analysis on every parameter gave a clear answer, and not the one I expected. The dominant term is not the battery model at all — it is auxiliary power, the constant draw of heating, lighting and electronics, which is independent of speed and therefore accumulates with time rather than distance. Traction efficiency comes second, since the battery power scales roughly as its inverse.</p>
+    <p>A one-at-a-time sensitivity analysis on every parameter gave a clear answer, and not the one I expected. The dominant term is not the battery model at all , it is auxiliary power, the constant draw of heating, lighting and electronics, which is independent of speed and therefore accumulates with time rather than distance. Traction efficiency comes second, since the battery power scales roughly as its inverse.</p>
 
     <p>Two corrections illustrate the point. Modelled pack mass, at 1 kg per cell, is lighter than teardown estimates of the real vehicle; correcting for it brings the prediction to 702 km and the error to 5.6 %. Dropping auxiliary power to 500 W, plausible in mild weather, closes part of what remains.</p>
 
@@ -141,7 +141,7 @@
 
     <h2>What it does not do</h2>
 
-    <p>No polarization dynamics — a zeroth-order circuit cannot reproduce voltage relaxation, and it shows when the model is compared against a measured recovery curve. No temperature dependence, no cell-to-cell imbalance, no road slope, and constant efficiencies throughout. All deliberate: the framework is built for pack sizing and comparative range analysis, where transparency and a low parameter count are worth more than absolute accuracy.</p>
+    <p>No polarization dynamics , a zeroth-order circuit cannot reproduce voltage relaxation, and it shows when the model is compared against a measured recovery curve. No temperature dependence, no cell-to-cell imbalance, no road slope, and constant efficiencies throughout. All deliberate: the framework is built for pack sizing and comparative range analysis, where transparency and a low parameter count are worth more than absolute accuracy.</p>
 
   </section>
 

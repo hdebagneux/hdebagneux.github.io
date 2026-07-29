@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Line-following robot — Hanaé Frotier de Bagneux</title>
+<title>Line-following robot , Hanaé Frotier de Bagneux</title>
 <meta name="description" content="An autonomous Raspberry Pi robot that follows a line with a PID controller, plans routes on a grid with breadth-first search, and avoids obstacles in real time. Two-week robotics bootcamp.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
   <section class="band band--tight project-head">
     <p class="eyebrow">Robotics bootcamp · November 2025</p>
     <h1>Two weeks to make a robot stay on a line and know where it is going.</h1>
-    <p class="lede">Two problems that sound like one. Staying on the track is continuous control; deciding which way to turn at a junction is discrete search. The robot has to do both at once, on the same Raspberry Pi, in real time — and stop for obstacles and ramps while it's at it.</p>
+    <p class="lede">Two problems that sound like one. Staying on the track is continuous control; deciding which way to turn at a junction is discrete search. The robot has to do both at once, on the same Raspberry Pi, in real time , and stop for obstacles and ramps while it's at it.</p>
 
     <dl class="factsheet">
       <div><dt>Context</dt><dd>Robotics bootcamp<br>CentraleSupélec × McGill</dd></div>
@@ -54,14 +54,14 @@
     <p>Before any of the behaviour, the thing that made two weeks survivable was the structure. The code is in three layers: thin hardware drivers that each wrap a single device, hardware-independent algorithms that can be tested on a laptop, and mission scripts that only orchestrate. A steering bug then lives in the servo driver, a routing bug lives in the search, and the mission script stays readable. That separation is also what let us re-tune quickly when the track or the lighting misbehaved.</p>
 
     <ul>
-      <li><b>Drivers</b> — DC motors (PWM speed and direction), the three servos through a PCA9685 controller, the three IR line sensors, the ultrasonic rangefinder, the MPU6050 IMU, an OLED status screen and the indicator LEDs. Each one also runs standalone, so wiring can be checked one device at a time.</li>
-      <li><b>Algorithms</b> — a reusable PID controller and a breadth-first path planner, both written without any reference to the hardware.</li>
-      <li><b>Missions</b> — the figure-8 line-following run, grid navigation, and grid navigation with live obstacle avoidance.</li>
+      <li><b>Drivers</b> , DC motors (PWM speed and direction), the three servos through a PCA9685 controller, the three IR line sensors, the ultrasonic rangefinder, the MPU6050 IMU, an OLED status screen and the indicator LEDs. Each one also runs standalone, so wiring can be checked one device at a time.</li>
+      <li><b>Algorithms</b> , a reusable PID controller and a breadth-first path planner, both written without any reference to the hardware.</li>
+      <li><b>Missions</b> , the figure-8 line-following run, grid navigation, and grid navigation with live obstacle avoidance.</li>
     </ul>
 
     <h2>Staying on the line</h2>
 
-    <p>The three infrared sensors report a binary pattern — which of them can see the line. That pattern is collapsed into a single number describing how far the robot has drifted off centre, from strongly left to strongly right:</p>
+    <p>The three infrared sensors report a binary pattern , which of them can see the line. That pattern is collapsed into a single number describing how far the robot has drifted off centre, from strongly left to strongly right:</p>
 
     <table class="data">
       <tr><th>Sensors (L, M, R)</th><th>Meaning</th><th>Error</th></tr>
@@ -73,20 +73,20 @@
       <tr><td>0, 0, 0</td><td>line lost</td><td>reuse last error</td></tr>
     </table>
 
-    <p>That error drives a PID controller. The proportional term reacts to the current offset, the integral term — a rolling sum over the last ten readings, clamped so it cannot wind up — removes the steady lean that appears on long curves, and the derivative term damps the response so the robot settles instead of hunting across the line.</p>
+    <p>That error drives a PID controller. The proportional term reacts to the current offset, the integral term , a rolling sum over the last ten readings, clamped so it cannot wind up , removes the steady lean that appears on long curves, and the derivative term damps the response so the robot settles instead of hunting across the line.</p>
 
     <div class="eq">
       <div>$$u(t) = K_p\,e(t) + K_i\!\int_0^t e(\tau)\,d\tau + K_d\,\frac{de(t)}{dt}$$</div>
       <p class="eq-note">Three gains, and no formula that hands them to you. We settled on K<sub>p</sub> = 7.5, K<sub>i</sub> = 2.5, K<sub>d</sub> = 2.5 with the correction clamped to ±25°. Tuning is where most of the two weeks went, and where the difference between a robot that finishes the course and one that drives off it is decided.</p>
     </div>
 
-    <p>Two details did most of the work on the hard parts of the track. When the line vanishes completely, the controller keeps steering toward the last side it saw rather than freezing — that memory of the previous state is what carries it through dashed lines and gaps. And for corners too tight for the steering servo alone, the rear wheels are driven in opposite directions to pivot the robot in place.</p>
+    <p>Two details did most of the work on the hard parts of the track. When the line vanishes completely, the controller keeps steering toward the last side it saw rather than freezing , that memory of the previous state is what carries it through dashed lines and gaps. And for corners too tight for the steering servo alone, the rear wheels are driven in opposite directions to pivot the robot in place.</p>
 
     <h2>Knowing where to go</h2>
 
-    <p>On the grid challenge the floor is a 5×5 lattice of lines, and the robot has to drive from one cell to a target, turning only at junctions. The track is a graph — junctions are nodes, segments are edges — so the shortest route is a breadth-first search, which explores level by level and returns the path with the fewest segments.</p>
+    <p>On the grid challenge the floor is a 5×5 lattice of lines, and the robot has to drive from one cell to a target, turning only at junctions. The track is a graph , junctions are nodes, segments are edges , so the shortest route is a breadth-first search, which explores level by level and returns the path with the fewest segments.</p>
 
-    <p>The detail that made the plan executable is that the search state carries the robot's <em>heading</em>, not just its position. The output is therefore a list of body-relative moves — forward, left, right, stop — that the robot can follow directly, instead of compass directions it would have to reinterpret at every step. Between nodes it stays on PID line-following; the all-dark reading, when every sensor loses the line at once, is the signal that it has reached a junction and should pop the next command. Ninety-degree turns are open-loop manoeuvres that combine the steering servo with timed motor pulses.</p>
+    <p>The detail that made the plan executable is that the search state carries the robot's <em>heading</em>, not just its position. The output is therefore a list of body-relative moves , forward, left, right, stop , that the robot can follow directly, instead of compass directions it would have to reinterpret at every step. Between nodes it stays on PID line-following; the all-dark reading, when every sensor loses the line at once, is the signal that it has reached a junction and should pop the next command. Ninety-degree turns are open-loop manoeuvres that combine the steering servo with timed motor pulses.</p>
 
     <h2>Reacting to the world</h2>
 
@@ -94,7 +94,7 @@
 
     <h2>What I would do differently</h2>
 
-    <p>The honest bottleneck was that too much of the behaviour rests on hand-tuned constants — the PID gains, the 70&nbsp;cm threshold, the turn timings. They work on the track we tuned them on, but a closed-loop turn using the IMU heading, and thresholds derived from the robot's speed rather than picked by hand, would make the same code far less fragile when the surface or the lighting changes.</p>
+    <p>The honest bottleneck was that too much of the behaviour rests on hand-tuned constants , the PID gains, the 70&nbsp;cm threshold, the turn timings. They work on the track we tuned them on, but a closed-loop turn using the IMU heading, and thresholds derived from the robot's speed rather than picked by hand, would make the same code far less fragile when the surface or the lighting changes.</p>
 
   </section>
 
