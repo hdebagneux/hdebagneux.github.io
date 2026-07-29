@@ -135,6 +135,7 @@ p { max-width: var(--measure); }
   object-fit: cover;
   border: 1px solid var(--rule);
   filter: saturate(0.94);
+  border-radius: 50%;
 }
 
 @media (max-width: 44rem) {
