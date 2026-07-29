@@ -165,18 +165,37 @@ p { max-width: var(--measure); }
 
 .hero-photo { margin: 0; }
 
+.photo-ring {
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 6px;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #0C7A4C,
+        #17C37B,
+        #6EF2B2,
+        #17C37B,
+        #0C7A4C
+    );
+    background-size: 250% 250%;
+    animation: gradientMove 6s ease infinite;
+}
+
+.photo-ring img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .hero-photo img {
   display: block;
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 50%;
-  padding: 5px;
-background: linear-gradient(
-    135deg,
-    #0C7A4C 0%,
-    #13A063 45%,
-    #7BE495 100%
 );
 border-radius: 50%;
   filter: saturate(0.98);
@@ -184,13 +203,7 @@ border-radius: 50%;
 }
 
 .hero-photo img:hover {
-   transform: translateY(-3px);
-    background: linear-gradient(
-        135deg,
-        #13A063,
-        #1CC97A,
-        #9EF3C4
-    );
+    transform: translateY(-3px);
 }
 
 @media (max-width: 44rem) {
@@ -782,4 +795,15 @@ table.data tr:hover td { background: var(--signal-soft); }
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
+}
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
